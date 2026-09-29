@@ -36,6 +36,13 @@ pipeline {
                     sh '''
                         ssh -o StrictHostKeyChecking=no ubuntu@172.31.8.93 "
                             docker pull ${IMAGE_NAME}:${BUILD_NUMBER} &&
+                            if docker inspect knban-app >/dev/null
+                            2?&1 ; then
+                             OLD_IMAGE=\$(docker inspect kanban-app --format='{{.Config.Image}}')
+                             docker tag \$OLD_IMAGE $
+                                {IMAGE_NAME}:rollback
+                                  fi
+                                   
                             docker stop kanban-app || true &&
                             docker rm kanban-app || true &&
                             
