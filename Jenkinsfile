@@ -38,8 +38,12 @@ pipeline {
                             docker pull ${IMAGE_NAME}:${BUILD_NUMBER} &&
                             docker stop kanban-app || true &&
                             docker rm kanban-app || true &&
-                            docker run -d \
+                            
+                               docker run -d \
                                 --name kanban-app \
+                                --memory 512m \
+                                --memory-swap 512m \
+                                --cpus 1.0 \
                                 -p 5173:5173 \
                                 ${IMAGE_NAME}:${BUILD_NUMBER}
                         "
